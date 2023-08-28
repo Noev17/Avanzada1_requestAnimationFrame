@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mover Cuadrado en Canva</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
+</head>
+<body>
+<div id="contenedorCanvas"></div>
+<script>
+  const contenedorCanvas = document.getElementById("contenedorCanvas");
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = 800;
+  canvas.height = 600;
+  contenedorCanvas.appendChild(canvas);
+
+  const cuadrado = {
+    x: canvas.width / 2 - 25,
+    y: canvas.height / 2 - 25,
+    lado: 50,
+    velocidadX: 0,
+    velocidadY: 0,
+    velocidadNormal: 3,
+    incrementoVelocidad: 1,
+    velocidadMaxima: 100,
+    velocidadActual: 3
+  };
+
+  function dibujarCuadrado() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    ctx.fillRect(cuadrado.x, cuadrado.y, cuadrado.lado, cuadrado.lado);
+  }
+
+  function moverCuadrado() {
+    cuadrado.x += cuadrado.velocidadX;
+    cuadrado.y += cuadrado.velocidadY;
+
+    if (cuadrado.x + cuadrado.lado < 0) cuadrado.x = canvas.width;
+    if (cuadrado.x > canvas.width) cuadrado.x = -cuadrado.lado;
+    if (cuadrado.y + cuadrado.lado < 0) cuadrado.y = canvas.height;
+    if (cuadrado.y > canvas.height) cuadrado.y = -cuadrado.lado;
+
+    dibujarCuadrado();
+    requestAnimationFrame(moverCuadrado);
+  }
+
+  function manejarTeclaPresionada(event) {
+    switch (event.key) {
+      case "ArrowUp":
+        cuadrado.velocidadX = 0;
+        cuadrado.velocidadY = -cuadrado.velocidadActual;
+        break;
+      case "ArrowDown":
+        cuadrado.velocidadX = 0;
+        cuadrado.velocidadY = cuadrado.velocidadActual;
+        break;
+      case "ArrowLeft":
+        cuadrado.velocidadX = -cuadrado.velocidadActual;
+        cuadrado.velocidadY = 0;
+        break;
+      case "ArrowRight":
+        cuadrado.velocidadX = cuadrado.velocidadActual;
+        cuadrado.velocidadY = 0;
+        break;
+      case " ":
+        cuadrado.velocidadActual = Math.min(cuadrado.velocidadActual + cuadrado.incrementoVelocidad, cuadrado.velocidadMaxima);
+        break;
+      case "z":
+      cuadrado.velocidadActual = Math.min(cuadrado.velocidadActual - cuadrado.incrementoVelocidad, cuadrado.velocidadMaxima);
+
+        break;
+    }
+  }
+
+  function manejarTeclaLiberada(event) {
+    switch (event.key) {
+      case "ArrowUp":
+      case "ArrowDown":
+      case "ArrowLeft":
+      case "ArrowRight":
+        cuadrado.velocidadX = 0;
+        cuadrado.velocidadY = 0;
+        break;
+      case " ":
+      cuadrado.velocidadActual = Math.min(cuadrado.velocidadActual + cuadrado.incrementoVelocidad, cuadrado.velocidadMaxima);
+
+        break;
+
+        case "z":
+      cuadrado.velocidadActual = Math.min(cuadrado.velocidadActual - cuadrado.incrementoVelocidad, cuadrado.velocidadMaxima);
+
+        break;
+    }
+  }
+
+  window.addEventListener("keydown", manejarTeclaPresionada);
+  window.addEventListener("keyup", manejarTeclaLiberada);
+
+  dibujarCuadrado();
+  moverCuadrado();
+</script>
+
+<h1 style="right: 50px;">Preciona "Espacio para Mas Velovidad "</h1>
+
+
+</body>
+
+<style>
+
+Canvas{
+    background-color: black;
+}
+
+</style>
+</html>
